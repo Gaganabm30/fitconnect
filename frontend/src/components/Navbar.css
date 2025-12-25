@@ -1,0 +1,144 @@
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 3rem;
+    background-color: transparent;
+    width: 100%;
+    box-sizing: border-box;
+    /* Fixes the overflow issue */
+    position: fixed;
+    /* Changed to fixed so it stays visible on scroll */
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    transition: all 0.4s ease-in-out;
+    /* Smooth transition */
+}
+
+.navbar.scrolled {
+    background-color: rgba(0, 0, 0, 0.85);
+    /* Dark background on scroll */
+    backdrop-filter: blur(10px);
+    padding: 1rem 3rem;
+    /* Slightly compact on scroll */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Hover hint: subtly darken even when transparent if hovered (optional, per user request for "hover") */
+.navbar:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.navbar.scrolled:hover {
+    background-color: rgba(0, 0, 0, 0.95);
+}
+
+body.dark-mode .navbar {
+    background-color: transparent;
+    border-bottom: none;
+}
+
+.logo a.brand-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    text-decoration: none;
+}
+
+.logo-icon {
+    font-size: 3.5rem;
+    /* Made significantly larger */
+    color: #ff6b6b;
+    /* Accent color for the logo symbol */
+    filter: drop-shadow(0 0 8px rgba(255, 107, 107, 0.8));
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+}
+
+.nav-links a {
+    margin-left: 30px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1.1rem;
+    position: relative;
+}
+
+/* Hover effect for standard links */
+.nav-links a:not(.signup-btn)::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -5px;
+    left: 0;
+    background-color: #ff6b6b;
+    transition: width 0.3s ease;
+}
+
+.nav-links a:not(.signup-btn):hover::after {
+    width: 100%;
+}
+
+.nav-links a:hover {
+    color: #fff;
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+}
+
+/* Special style for Signup button */
+.signup-btn {
+    padding: 10px 25px;
+    background: linear-gradient(45deg, #ff6b6b, #ff8e53);
+    color: white !important;
+    border-radius: 30px;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+}
+
+.signup-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(255, 107, 107, 0.6);
+}
+
+.logout-btn {
+    margin-left: 30px;
+    padding: 10px 25px;
+    background: linear-gradient(45deg, #ff6b6b, #ff8e53);
+    color: white;
+    border-radius: 30px;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+    transition: transform 0.3s;
+    border: none;
+    cursor: pointer;
+}
+
+.logout-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 107, 107, 0.5);
+}

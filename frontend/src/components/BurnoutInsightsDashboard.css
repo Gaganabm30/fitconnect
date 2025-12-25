@@ -1,0 +1,157 @@
+.burnout-dashboard-container {
+    background: linear-gradient(145deg, #1e1e1e, #252525);
+    border-radius: 16px;
+    padding: 24px;
+    color: #fff;
+    margin-top: 24px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    font-family: 'Inter', sans-serif;
+}
+
+.burnout-loading {
+    padding: 20px;
+    text-align: center;
+    color: #888;
+}
+
+.burnout-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.burnout-header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #e0e0e0;
+}
+
+.status-badge {
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: #121212;
+    text-transform: uppercase;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.burnout-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.stat-card {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 16px;
+    border-radius: 12px;
+    text-align: center;
+    transition: transform 0.2s;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.stat-card h3 {
+    margin: 0 0 8px 0;
+    font-size: 0.8rem;
+    color: #aaa;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.stat-value {
+    margin: 0;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #fff;
+}
+
+.recommendations-card {
+    background: rgba(64, 196, 255, 0.1);
+    border-left: 4px solid #40c4ff;
+    padding: 16px;
+    border-radius: 8px;
+    margin-bottom: 24px;
+}
+
+.recommendations-card h3 {
+    margin: 0 0 12px 0;
+    font-size: 1rem;
+    color: #40c4ff;
+}
+
+.rec-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.rec-item {
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+    color: #ddd;
+    display: flex;
+    align-items: start;
+}
+
+.rec-bullet {
+    color: #40c4ff;
+    margin-right: 8px;
+}
+
+.feedback-section {
+    text-align: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 16px;
+}
+
+.feedback-section p {
+    color: #888;
+    margin-bottom: 12px;
+    font-size: 0.9rem;
+}
+
+.feedback-buttons {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+}
+
+.feedback-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 0.9rem;
+}
+
+.feedback-btn.good {
+    background: rgba(76, 175, 80, 0.2);
+    color: #4caf50;
+    border: 1px solid rgba(76, 175, 80, 0.3);
+}
+
+.feedback-btn.good:hover {
+    background: rgba(76, 175, 80, 0.3);
+    transform: scale(1.05);
+}
+
+.feedback-btn.tired {
+    background: rgba(255, 193, 7, 0.2);
+    color: #ffc107;
+    border: 1px solid rgba(255, 193, 7, 0.3);
+}
+
+.feedback-btn.tired:hover {
+    background: rgba(255, 193, 7, 0.3);
+    transform: scale(1.05);
+}

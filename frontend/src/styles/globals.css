@@ -1,0 +1,66 @@
+:root {
+  --primary-color: #6C5DD3;
+  --secondary-color: #A0D7E7;
+  --accent-color: #FF754C;
+  --bg-dark: #1F2128;
+  --card-dark: #242731;
+  --text-light: #E4E4E4;
+  --text-muted: #808191;
+  --bg-light: #F7F7F7;
+  --card-light: #FFFFFF;
+  --text-dark: #11142D;
+}
+
+body {
+  margin: 0;
+  overflow-x: hidden;
+  /* Prevent horizontal scroll */
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--bg-light);
+  color: var(--text-dark);
+  transition: background-color 0.3s ease;
+}
+
+body.dark-mode {
+  background-color: var(--bg-dark);
+  color: var(--text-light);
+}
+
+.card {
+  background-color: var(--card-light);
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+  padding: 24px;
+}
+
+body.dark-mode .card {
+  background-color: var(--card-dark);
+  box-shadow: none;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 24px;
+  font-weight: 600;
+  transition: transform 0.2s;
+}
+
+button:hover {
+  transform: translateY(-2px);
+}
+
+button.primary {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
