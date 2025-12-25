@@ -5,6 +5,7 @@ import '../pages/DashboardLayout.css';
 
 const SharedLayout = () => {
     const location = useLocation();
+    const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
 
     const getBackgroundImage = () => {
         switch (location.pathname) {
@@ -29,11 +30,27 @@ const SharedLayout = () => {
             ></div>
             <div className="dashboard-overlay"></div>
 
-            <Sidebar />
+            {/* Mobile Toggle Button */}
+            <button
+                className="mobile-toggle-btn"
+                onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+            >
+                ☰
+            </button>
+
+            <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
 
             <div className="main-content">
                 <Outlet />
             </div>
+
+            {/* Overlay to close sidebar on mobile when open */}
+            {isSidebarOpen && (
+                <div
+                    className="mobile-sidebar-overlay"
+                    onClick={() => setIsSidebarOpen(false)}
+                ></div>
+            )}
         </div>
     );
 };
