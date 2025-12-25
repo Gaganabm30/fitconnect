@@ -66,6 +66,9 @@ const Landing = () => {
           min-height: 100vh;
           font-family: 'Poppins', sans-serif;
           color: white;
+          overflow-x: hidden; /* Prevent horizontal scroll */
+          margin: 0;
+          padding: 0;
         }
 
         /* Background Animation */
@@ -73,8 +76,8 @@ const Landing = () => {
           position: fixed; /* Stays fixed while body scrolls */
           top: 0;
           left: 0;
-          width: 100vw;
-          height: 100vh;
+          width: 100%; /* Changed from 100vw to 100% to avoid scrollbar width issues */
+          height: 100%;
           /* Outdoor fitness image (Forest/Running) */
           background: url('https://images.unsplash.com/photo-1502904550040-7534597429ae?q=80&w=1740&auto=format&fit=crop') no-repeat center center/cover;
           z-index: -2;
@@ -97,6 +100,7 @@ const Landing = () => {
           flex-direction: column;
           align-items: center;
           padding-bottom: 3rem;
+          overflow-x: hidden; /* Double check for overflow */
         }
 
         /* Hero Styling */
@@ -107,6 +111,8 @@ const Landing = () => {
           margin-top: 120px; /* Increased top margin for spacing under floating navbar */
           position: relative;
           z-index: 2;
+          width: 100%; /* Ensure text doesn't push width */
+          box-sizing: border-box;
         }
 
         .brand-title {
@@ -118,6 +124,7 @@ const Landing = () => {
           background: linear-gradient(to right, #ffffff, #a0a0a0);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
+          word-wrap: break-word; /* Prevent long words breaking layout */
         }
 
         .brand-title .highlight {
@@ -143,6 +150,7 @@ const Landing = () => {
           max-width: 700px;
           margin-left: auto;
           margin-right: auto;
+          padding: 0 1rem;
         }
 
         /* CTA Buttons */
@@ -151,6 +159,7 @@ const Landing = () => {
           justify-content: center;
           gap: 20px;
           margin-bottom: 4rem;
+          flex-wrap: wrap; /* Allow wrapping on small screens */
         }
 
         .cta-button {
@@ -160,6 +169,7 @@ const Landing = () => {
           text-decoration: none;
           display: flex;
           align-items: center;
+          justify-content: center;
           gap: 10px;
           transition: all 0.3s ease;
         }
@@ -195,8 +205,10 @@ const Landing = () => {
           grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
           gap: 30px;
           max-width: 1200px;
-          width: 90%;
+          width: 100%; /* Changed from 90% */
+          padding: 0 20px; /* Use padding instead of width % */
           padding-bottom: 4rem;
+          box-sizing: border-box;
         }
 
         .feature-card {
@@ -264,8 +276,8 @@ const Landing = () => {
           .brand-title { font-size: 3rem; }
           .tagline { font-size: 1.5rem; }
           .hero-container { padding: 1rem; margin-top: 30px; }
-          .cta-wrapper { flex-direction: column; }
-          .cta-button { width: 100%; justify-content: center; }
+          .cta-wrapper { flex-direction: column; width: 100%; }
+          .cta-button { width: 100%; box-sizing: border-box; }
         }
       `}</style>
     </div>
