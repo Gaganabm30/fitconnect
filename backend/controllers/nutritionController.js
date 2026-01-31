@@ -94,11 +94,12 @@ const estimateCalories = asyncHandler(async (req, res) => {
         Analyze the following food description: "${query}"
         Identify food items, quantity, and estimate EXAT calories for each (single number, no ranges).
         Also provide a total estimated calorie count (single number).
+        Crucially, assess the "Fitness Impact" of each item (High, Medium, Low) - meaning how good it is for muscle growth/health.
         
         The response MUST be valid JSON in the following format (do not wrap in markdown code blocks, just raw JSON):
         {
             "parsedFood": [
-                { "foodName": "Food Name", "quantity": "Quantity", "calories": 120, "confidence": "Medium" }
+                { "foodName": "Food Name", "quantity": "Quantity", "calories": 120, "confidence": "Medium", "fitnessImpact": "High" }
             ],
             "totalCalories": 500,
             "confidence": "Medium",
@@ -127,13 +128,54 @@ const estimateCalories = asyncHandler(async (req, res) => {
         let totalCalories = 0;
 
         const foodDatabase = {
-            'chapati': 104, 'roti': 104, 'naan': 260, 'paratha': 260,
-            'dal': 150, 'sambar': 130, 'curry': 170, 'paneer': 200,
-            'rice': 130, 'biryani': 290, 'pulao': 200,
-            'dosa': 170, 'idli': 60, 'vada': 150, 'upma': 190,
-            'tea': 40, 'coffee': 60, 'milk': 120,
-            'egg': 70, 'omelette': 150, 'sandwich': 250,
-            'salad': 100, 'soup': 80, 'pizza': 285, 'burger': 350
+            // FAQ / Staples
+            'chapati': { cal: 104, impact: 'Medium' }, 'roti': { cal: 104, impact: 'Medium' }, 'fulka': { cal: 80, impact: 'Medium' }, 'naan': { cal: 260, impact: 'Low' }, 'butter naan': { cal: 300, impact: 'Low' }, 'paratha': { cal: 260, impact: 'Medium' }, 'aloo paratha': { cal: 320, impact: 'Medium' }, 'paneer paratha': { cal: 350, impact: 'High' },
+            'dal': { cal: 150, impact: 'High' }, 'dal tadka': { cal: 180, impact: 'High' }, 'dal makhani': { cal: 280, impact: 'Medium' }, 'sambar': { cal: 130, impact: 'High' }, 'rasam': { cal: 80, impact: 'High' },
+            'rice': { cal: 130, impact: 'Medium' }, 'steamed rice': { cal: 130, impact: 'Medium' }, 'fried rice': { cal: 250, impact: 'Low' }, 'jeera rice': { cal: 180, impact: 'Medium' }, 'biryani': { cal: 290, impact: 'Medium' }, 'chicken biryani': { cal: 350, impact: 'High' }, 'veg biryani': { cal: 280, impact: 'Medium' }, 'pulao': { cal: 200, impact: 'Medium' }, 'curd rice': { cal: 210, impact: 'High' },
+            'curry': { cal: 170, impact: 'Medium' }, 'veg curry': { cal: 170, impact: 'High' }, 'chicken curry': { cal: 250, impact: 'High' }, 'fish curry': { cal: 220, impact: 'High' }, 'paneer butter masala': { cal: 350, impact: 'High' }, 'chole': { cal: 220, impact: 'High' }, 'rajma': { cal: 200, impact: 'High' },
+            // Generic Basics (Fallbacks for single words)
+            'chicken': { cal: 220, impact: 'High' }, 'paneer': { cal: 265, impact: 'High' }, 'egg': { cal: 70, impact: 'High' }, 'fish': { cal: 200, impact: 'High' }, 'mutton': { cal: 294, impact: 'High' },
+
+            // Indian Breakfast
+            'dosa': { cal: 170, impact: 'Medium' }, 'masala dosa': { cal: 350, impact: 'Medium' }, 'idli': { cal: 60, impact: 'High' }, 'vada': { cal: 150, impact: 'Low' }, 'medu vada': { cal: 150, impact: 'Low' }, 'sambar vada': { cal: 200, impact: 'Medium' },
+            'upma': { cal: 190, impact: 'Medium' }, 'poha': { cal: 180, impact: 'High' }, 'pongal': { cal: 220, impact: 'Medium' }, 'puri': { cal: 140, impact: 'Low' }, 'bhatura': { cal: 280, impact: 'Low' },
+
+            // Junk / Street Food
+            'pani puri': { cal: 50, impact: 'Low' }, 'golgappa': { cal: 50, impact: 'Low' }, 'samosa': { cal: 260, impact: 'Low' }, 'kachori': { cal: 280, impact: 'Low' }, 'vada pav': { cal: 290, impact: 'Low' }, 'pav bhaji': { cal: 400, impact: 'Low' }, 'bhel puri': { cal: 200, impact: 'Medium' }, 'sev puri': { cal: 250, impact: 'Low' }, 'papdi chaat': { cal: 250, impact: 'Low' },
+            'momos': { cal: 35, impact: 'Low' }, 'veg momos': { cal: 35, impact: 'Low' }, 'chicken momos': { cal: 50, impact: 'Medium' }, 'spring roll': { cal: 150, impact: 'Low' },
+            'noodles': { cal: 350, impact: 'Low' }, 'chowmein': { cal: 380, impact: 'Low' }, 'hakka noodles': { cal: 350, impact: 'Low' }, 'manchurian': { cal: 250, impact: 'Low' }, 'gobi manchurian': { cal: 280, impact: 'Low' }, 'chilli potato': { cal: 300, impact: 'Low' },
+            'maggi': { cal: 210, impact: 'Low' }, 'pasta': { cal: 250, impact: 'Low' }, 'macaroni': { cal: 250, impact: 'Low' },
+            'pizza': { cal: 285, impact: 'Low' }, 'burger': { cal: 350, impact: 'Low' }, 'fries': { cal: 312, impact: 'Low' }, 'french fries': { cal: 312, impact: 'Low' }, 'sandwich': { cal: 250, impact: 'Medium' }, 'grilled sandwich': { cal: 300, impact: 'Medium' },
+            'chips': { cal: 150, impact: 'Low' }, 'nachos': { cal: 300, impact: 'Low' }, 'popcorn': { cal: 100, impact: 'Medium' }, 'biscuits': { cal: 40, impact: 'Low' }, 'cookie': { cal: 50, impact: 'Low' }, 'rusk': { cal: 40, impact: 'Low' },
+
+            // Dry Fruits & Nuts
+            'almonds': { cal: 7, impact: 'High' }, 'badam': { cal: 7, impact: 'High' },
+            'cashews': { cal: 10, impact: 'High' }, 'kaju': { cal: 10, impact: 'High' },
+            'walnuts': { cal: 26, impact: 'High' }, 'akhrot': { cal: 26, impact: 'High' },
+            'raisins': { cal: 2, impact: 'Medium' }, 'kishmish': { cal: 2, impact: 'Medium' },
+            'dates': { cal: 25, impact: 'High' }, 'khajoor': { cal: 25, impact: 'High' },
+            'pista': { cal: 4, impact: 'High' },
+            'fig': { cal: 47, impact: 'High' }, 'anjeer': { cal: 47, impact: 'High' },
+            'peanuts': { cal: 160, impact: 'High' }, 'groundnuts': { cal: 160, impact: 'High' },
+
+            // Healthy / Breakfast
+            'oats': { cal: 150, impact: 'High' }, 'oatmeal': { cal: 150, impact: 'High' }, 'cornflakes': { cal: 180, impact: 'Medium' }, 'muesli': { cal: 200, impact: 'High' }, 'quinoa': { cal: 120, impact: 'High' },
+            'bread': { cal: 70, impact: 'Medium' }, 'toast': { cal: 70, impact: 'Medium' }, 'brown bread': { cal: 65, impact: 'High' }, 'butter': { cal: 100, impact: 'Medium' }, 'cheese': { cal: 113, impact: 'Medium' }, 'jam': { cal: 50, impact: 'Low' },
+            'boiled egg': { cal: 70, impact: 'High' }, 'omelette': { cal: 150, impact: 'High' }, 'bhurji': { cal: 180, impact: 'High' },
+            'salad': { cal: 100, impact: 'High' }, 'soup': { cal: 80, impact: 'High' }, 'sprouts': { cal: 60, impact: 'High' },
+
+            // Drinks
+            'tea': { cal: 40, impact: 'Medium' }, 'chai': { cal: 40, impact: 'Medium' }, 'coffee': { cal: 60, impact: 'Medium' }, 'milk': { cal: 120, impact: 'High' }, 'curd': { cal: 100, impact: 'High' }, 'yogurt': { cal: 100, impact: 'High' }, 'lassi': { cal: 200, impact: 'Medium' }, 'buttermilk': { cal: 40, impact: 'High' }, 'chaas': { cal: 40, impact: 'High' },
+            'coke': { cal: 140, impact: 'Low' }, 'pepsi': { cal: 140, impact: 'Low' }, 'sprite': { cal: 140, impact: 'Low' }, 'soda': { cal: 140, impact: 'Low' }, 'cold drink': { cal: 140, impact: 'Low' }, 'juice': { cal: 120, impact: 'Medium' }, 'orange juice': { cal: 110, impact: 'High' }, 'apple juice': { cal: 115, impact: 'High' },
+            'beer': { cal: 150, impact: 'Low' }, 'wine': { cal: 125, impact: 'Low' }, 'whiskey': { cal: 105, impact: 'Low' }, 'vodka': { cal: 97, impact: 'Low' }, 'water': { cal: 0, impact: 'High' }, 'coconut water': { cal: 40, impact: 'High' },
+
+            // Sweets / Desserts
+            'gulab jamun': { cal: 150, impact: 'Low' }, 'rasgulla': { cal: 125, impact: 'Low' }, 'jalebi': { cal: 150, impact: 'Low' }, 'laddu': { cal: 200, impact: 'Low' }, 'barfi': { cal: 150, impact: 'Low' }, 'halwa': { cal: 300, impact: 'Low' }, 'kheer': { cal: 250, impact: 'Medium' },
+            'ice cream': { cal: 200, impact: 'Low' }, 'chocolate': { cal: 250, impact: 'Low' }, 'cake': { cal: 250, impact: 'Low' }, 'pastry': { cal: 300, impact: 'Low' }, 'brownie': { cal: 350, impact: 'Low' },
+
+            // Fruits & Veg
+            'apple': { cal: 95, impact: 'High' }, 'banana': { cal: 105, impact: 'High' }, 'mango': { cal: 150, impact: 'High' }, 'orange': { cal: 60, impact: 'High' }, 'grapes': { cal: 70, impact: 'High' }, 'papaya': { cal: 60, impact: 'High' }, 'watermelon': { cal: 50, impact: 'High' },
+            'potato': { cal: 110, impact: 'Medium' }, 'onion': { cal: 40, impact: 'High' }, 'tomato': { cal: 20, impact: 'High' }, 'cucumber': { cal: 16, impact: 'High' },
         };
 
         // Re-implementing a slightly smarter fallback loop
@@ -143,24 +185,41 @@ const estimateCalories = asyncHandler(async (req, res) => {
             let qty = 1;
             let currentWord = words[i];
 
-            if (!isNaN(currentWord) && parseFloat(currentWord) > 0) { // Ensure it's a positive number
+            // Handle multipliers like "2" or "3"
+            if (!isNaN(currentWord) && parseFloat(currentWord) > 0) {
                 qty = parseFloat(currentWord);
                 i++;
                 if (i < words.length) currentWord = words[i];
-                else { // Number at the end of query, can't be a quantity for a food
-                    qty = 1; // Reset qty if no food follows
-                    currentWord = words[i - 1]; // Revert to the number itself if no food follows
+                else {
+                    qty = 1;
+                    currentWord = words[i - 1];
                 }
             }
 
-            const baseWord = currentWord.replace(/s$/, ''); // Handle plurals
-            if (foodDatabase[baseWord]) {
-                const cals = foodDatabase[baseWord] * qty;
+            const baseWord = currentWord.replace(/s$/, ''); // Handle plurals basic
+
+            // Try explicit match first
+            let match = foodDatabase[currentWord] || foodDatabase[baseWord];
+
+            // Try multi-word match (e.g. "pani puri", "masala dosa")
+            if (!match && i + 1 < words.length) {
+                const nextWord = words[i + 1].replace(/s$/, '');
+                const twoWords = `${baseWord} ${nextWord}`;
+                if (foodDatabase[twoWords]) {
+                    match = foodDatabase[twoWords];
+                    currentWord = twoWords;
+                    i++; // consume next word
+                }
+            }
+
+            if (match) {
+                const cals = match.cal * qty;
                 parsedFood.push({
                     foodName: currentWord.charAt(0).toUpperCase() + currentWord.slice(1),
-                    quantity: `${qty} serving(s)`,
+                    quantity: `${qty} serving(s)/piece(s)`,
                     calories: cals,
-                    confidence: 'Low'
+                    confidence: 'Low (Offline Estimate)',
+                    fitnessImpact: match.impact
                 });
                 totalCalories += cals;
             }
@@ -170,15 +229,45 @@ const estimateCalories = asyncHandler(async (req, res) => {
         if (parsedFood.length === 0) {
             // Failed to find anything
             res.status(500);
-            throw new Error('Could not identify food items. Please check API Key or try standard foods.');
+            throw new Error('Could not identify food items. Please check API Key or try standard foods like "Chicken", "Paneer", "Rice".');
         }
+
+        const quotes = [
+            "Fuel your body, feed your soul.",
+            "Eat like you love yourself.",
+            "Every healthy meal is a step towards a better you.",
+            "Nourish to flourish.",
+            "You are what you eat, so don't be fast, cheap, easy, or fake.",
+            "Your body is a temple, keep it clean and prolonged.",
+            "Healthy eating is a form of self-respect."
+        ];
+        const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
 
         aiResponse = {
             parsedFood,
             totalCalories,
             confidence: 'Low (Offline Mode)',
-            explanation: 'Estimated using offline database because AI service was unavailable.'
+            explanation: `💡 Motivation: ${randomQuote}`
         };
+    }
+
+    // AI Path - Inject Quote if not in Offline Mode (Fallback already does it)
+    if (aiResponse && !aiResponse.confidence.includes('Offline')) {
+        const quotes = [
+            "Fuel your body, feed your soul.",
+            "Eat like you love yourself.",
+            "Every healthy meal is a step towards a better you.",
+            "Nourish to flourish.",
+            "You are what you eat, so don't be fast, cheap, easy, or fake."
+        ];
+        const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+
+        // Append quote to explanation if it exists
+        if (aiResponse.explanation) {
+            aiResponse.explanation += `\n\n💡 Motivation: ${randomQuote}`;
+        } else {
+            aiResponse.explanation = `💡 Motivation: ${randomQuote}`;
+        }
     }
 
     // Save to FoodLog

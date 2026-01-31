@@ -101,7 +101,8 @@ const AICalorieScanner = () => {
                             <tr>
                                 <th>Food Item</th>
                                 <th>Quantity</th>
-                                <th>Estimated Calories</th>
+                                <th>Calories</th>
+                                <th>Fitness Impact</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -110,6 +111,11 @@ const AICalorieScanner = () => {
                                     <td>{item.foodName}</td>
                                     <td>{item.quantity}</td>
                                     <td>{item.calories} kcal</td>
+                                    <td>
+                                        <span className={`impact-badge ${item.fitnessImpact?.toLowerCase() || 'medium'}`}>
+                                            {item.fitnessImpact || 'Medium'}
+                                        </span>
+                                    </td>
                                 </tr>
                             ))}
                         </tbody>
@@ -120,6 +126,32 @@ const AICalorieScanner = () => {
                     </button>
                 </div>
             )}
+
+            <div className="healthy-recommendations">
+                <h3>🥗 Top Healthy Recommendations for Growth</h3>
+                <div className="recommendations-grid">
+                    <div className="rec-card">
+                        <h4>Oats & Berries</h4>
+                        <p>High fiber, sustained energy. Great for breakfast.</p>
+                        <span className="impact-badge high">High Impact</span>
+                    </div>
+                    <div className="rec-card">
+                        <h4>Grilled Chicken / Paneer</h4>
+                        <p>Essential protein for muscle repair and growth.</p>
+                        <span className="impact-badge high">High Impact</span>
+                    </div>
+                    <div className="rec-card">
+                        <h4>Almonds & Walnuts</h4>
+                        <p>Healthy fats for brain and joint health.</p>
+                        <span className="impact-badge high">High Impact</span>
+                    </div>
+                    <div className="rec-card">
+                        <h4>Spinach & Dal</h4>
+                        <p>Iron and protein combo for recovery.</p>
+                        <span className="impact-badge high">High Impact</span>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 };
