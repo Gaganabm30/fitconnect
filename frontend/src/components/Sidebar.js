@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { FaHome, FaDumbbell, FaAppleAlt, FaUsers, FaBullseye, FaQuestionCircle, FaSignOutAlt, FaUserFriends } from 'react-icons/fa';
+import { FaHome, FaDumbbell, FaAppleAlt, FaUsers, FaBullseye, FaQuestionCircle, FaSignOutAlt, FaUserFriends, FaRobot } from 'react-icons/fa';
 import { useAuth } from '../context/AuthContext';
 import './Sidebar.css';
 
@@ -43,6 +43,10 @@ const Sidebar = ({ isOpen, onClose }) => {
                     <Link to="/nutrition" className={`menu-item ${isActive('/nutrition')}`} onClick={handleLinkClick}>
                         <FaAppleAlt className="menu-icon" />
                         <span>Nutrition</span>
+                    </Link>
+                    <Link to="/ai-scanner" className={`menu-item ${isActive('/ai-scanner')}`} onClick={handleLinkClick}>
+                        <FaRobot className="menu-icon" />
+                        <span>Calories Scanner</span>
                     </Link>
                     <Link to="/social" className={`menu-item ${isActive('/social')}`} onClick={handleLinkClick}>
                         <FaUsers className="menu-icon" />

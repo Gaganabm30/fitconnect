@@ -14,7 +14,8 @@ import Teams from './pages/Teams';
 import Profile from './pages/Profile';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import SharedLayout from './components/SharedLayout';
-
+import AICalorieScanner from './pages/AICalorieScanner';
+import BurnoutInsightsDashboard from './components/BurnoutInsightsDashboard';
 const PrivateRoute = ({ children }) => {
   const { user, loading } = useAuth();
 
@@ -28,7 +29,7 @@ const AppRoutes = () => {
   const isLanding = location.pathname === '/';
 
   // Routes where we want the full dashboard layout (no global navbar/footer)
-  const isDashboardRoute = ['/dashboard', '/teams', '/workouts', '/nutrition', '/social', '/goals', '/profile', '/help'].some(path => location.pathname.startsWith(path));
+  const isDashboardRoute = ['/dashboard', '/teams', '/workouts', '/nutrition', '/social', '/goals', '/profile', '/help', '/ai-scanner'].some(path => location.pathname.startsWith(path));
 
   // If it's a dashboard route, we don't render the global Navbar/Footer
   // The DashboardLayout handles its own structure (Sidebar + Content)
@@ -50,6 +51,8 @@ const AppRoutes = () => {
           <Route element={<PrivateRoute><SharedLayout /></PrivateRoute>}>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/teams" element={<Teams />} />
+            <Route path='/ai-scanner' element={<AICalorieScanner />} />
+            <Route path='/burnout' element={<BurnoutInsightsDashboard />} />
             <Route path="/workouts" element={<Workouts />} />
             <Route path="/nutrition" element={<Nutrition />} />
             <Route path="/social" element={<Social />} />
@@ -63,6 +66,7 @@ const AppRoutes = () => {
     </>
   );
 };
+
 
 function App() {
   return (

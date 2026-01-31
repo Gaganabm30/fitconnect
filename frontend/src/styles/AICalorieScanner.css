@@ -1,0 +1,129 @@
+.ai-scanner-container {
+    padding: 2rem;
+    max-width: 800px;
+    margin: 0 auto;
+    color: #fff;
+    /* Assuming dark theme based on context */
+}
+
+.scanner-form {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.scanner-form input {
+    flex: 1;
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid #444;
+    background-color: #222;
+    color: #fff;
+    font-size: 1rem;
+}
+
+.scanner-form button {
+    padding: 1rem 2rem;
+    background-color: #e50914;
+    /* Netflix red / brand color ? */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1rem;
+    transition: background 0.3s;
+}
+
+.scanner-form button:hover {
+    background-color: #f6121d;
+}
+
+.scanner-form button:disabled {
+    background-color: #666;
+    cursor: not-allowed;
+}
+
+.error-message {
+    background-color: rgba(255, 0, 0, 0.1);
+    border: 1px solid red;
+    color: red;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
+
+.results-container {
+    background-color: #1a1a1a;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.summary-card {
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.confidence-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    margin: 0.5rem 0;
+}
+
+.confidence-badge.high {
+    background-color: rgba(0, 255, 0, 0.2);
+    color: #00ff00;
+}
+
+.confidence-badge.medium {
+    background-color: rgba(255, 165, 0, 0.2);
+    color: #ffa500;
+}
+
+.confidence-badge.low {
+    background-color: rgba(255, 0, 0, 0.2);
+    color: #ff0000;
+}
+
+.explanation {
+    color: #ccc;
+    font-style: italic;
+    margin-top: 1rem;
+}
+
+.results-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 2rem;
+}
+
+.results-table th,
+.results-table td {
+    text-align: left;
+    padding: 1rem;
+    border-bottom: 1px solid #333;
+}
+
+.results-table th {
+    color: #aaa;
+    font-weight: 500;
+}
+
+.save-button {
+    width: 100%;
+    padding: 1rem;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.save-button:disabled {
+    background-color: #666;
+}
